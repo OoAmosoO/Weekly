@@ -114,3 +114,6 @@ js <-----> js
 
 ## 声明
 以上内容仅针对具备Android 开发经验的Developer。
+
+## 附录
+* [javascript guide](https://github.com/airbnb/javascript)
