@@ -117,3 +117,4 @@ js <-----> js
 
 ## 附录
 * [javascript guide](https://github.com/airbnb/javascript)
+* [React语法](https://facebook.github.io/react/)
