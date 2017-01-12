@@ -109,7 +109,8 @@ js <-----> js
 
 ### 官方Demo
 * [工程](https://github.com/facebook/react-native#examples)
-* [实例APK](./UIExploerer_Release_V1.0.apk)
+* [实例APK](./UIExploerer_Release_V1.0.apk)，手机扫描下面的二维码安装  
+![](./image/app-qrcode-rn_demo.png)
 
 ## 声明
 以上内容仅针对具备Android 开发经验的Developer。
