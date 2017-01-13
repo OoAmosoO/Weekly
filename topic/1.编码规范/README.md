@@ -1,5 +1,9 @@
 ## 编码规范
 
+### 简介
+* [Letv编码规范](./Letv编码规范.md)
+* [Android编码规范](./Android编码规范.md)
+
 ### Log篇
 * 必须用LogUtils输出，不能直接调用android.os.Log输出，也不能用System.out输出
 * 不要在getView，bindViewHolder等方法中大量输出log
@@ -9,7 +13,7 @@
 	* d: 调试用
 	* I: 关键的状态log
 	* w: 异常但是程序可以正常工作的log
-	* e: 程序无法正常运行的log 
+	* e: 程序无法正常运行的log
 
 ### 性能篇
 * 不用使用enum（内存占用是int的10倍）用@IntDef和@StringDef（附录1）

@@ -1,6 +1,3 @@
-# React Native
-PDF版：[React Native入门教程](./React Native.pdf)
-
 ## 1. 认识React Native
 * RN 是什么？
 * RN开发的APP什么样？
@@ -103,7 +100,7 @@ js <-----> js
 ![](./image/10.png)
 
 * index.android.js是ReactNative的入口文件，后缀Android表示是在Android平台使用的代码。
-* 文件夹名字‘js’是自己命名的，内含多个自定义组件。
+* 文件夹名字‘js’是自己命名的，内含多个自定义组件。(https://www.decosoftware.com)
 * android 代码的文件夹，内部文件结构与AS相似，如下图所示
 ![](./image/11.png)
 
@@ -116,5 +113,6 @@ js <-----> js
 以上内容仅针对具备Android 开发经验的Developer。
 
 ## 附录
-* [javascript guide](https://github.com/airbnb/javascript)
+* [Deco IDE for React Native](https://www.decosoftware.com)
+* [JavaScript Guide](https://github.com/airbnb/javascript)
 * [React语法](https://facebook.github.io/react/)
