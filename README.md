@@ -1,5 +1,5 @@
 ## Weekly 每周分享
-* [编码风格](./topic/1.编码规范)
+* [编码规范](./topic/1.编码规范)
 * [性能优化](./topic/2.性能优化)
 * [React Native](./topic/3.React Native)
 
