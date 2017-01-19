@@ -49,3 +49,10 @@
 	* 不需要拿到对象的实例来注册callback
 	* 避免忘记反注册callback导致内存问题
 	* 可以使用sticky message，注册后能拿到之前的消息
+
+### 格式篇
+* 消除警告，即一个类的右边不应该有黄色的警告。
+	* 根据IDE提示修改
+	* 添加SuppressWarnings注解，类型可以是unused，unchecked, ResultOfMethodCallIgnored等。
+	* 修改默认的File Header样式，在Setting->Editor->File and Code Templates->Includes->File Header中修改，建议统一格式。
+* 一行代码不要超过100个字符，AS有一条线作为参照，超过的另起一行，换行标准可参考Android源码。
