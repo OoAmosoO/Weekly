@@ -56,3 +56,15 @@
 	* 添加SuppressWarnings注解，类型可以是unused，unchecked, ResultOfMethodCallIgnored等。
 	* 修改默认的File Header样式，在Setting->Editor->File and Code Templates->Includes->File Header中修改，建议统一格式。
 * 一行代码不要超过100个字符，AS有一条线作为参照，超过的另起一行，换行标准可参考Android源码。
+```
+// 类注释模板1
+/**
+ * @author jack on 17-01-01
+ */
+
+// 类注释模板2
+/**
+ * @author jack
+ * @since 17-01-01
+ */
+```
