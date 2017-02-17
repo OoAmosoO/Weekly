@@ -3,6 +3,7 @@
 ### 简介
 * [Letv编码规范](./Letv编码规范.md)
 * [Android编码规范](./Android编码规范.md)
+* [阿里巴巴Java开发手册](./Alibaba-Java.pdf)
 
 ### Log篇
 * 必须用LogUtils输出，不能直接调用android.os.Log输出，也不能用System.out输出
