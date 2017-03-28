@@ -1,19 +1,23 @@
 # Glide源码解析
+===========
 ![](./image/glide_logo.png)
 
-# 功能介绍
+## 功能介绍
 Android图片加载框架，支持Video，Gif，SVG格式，支持缩略图请求，目标是打造更好的图片列表滑动体验。Glide有生命周期的概念，可以与Activity和Fragment绑定，默认使用基于HttpUrlConnection的自定义网络层，支持Okhttp和Volley，友好的内存管理和磁盘管理。
 
-# 简单用法
-```
+## 简单用法
+```Java
 Glide.with(context).load(url).into(imageView);
 ```
 
-# 框架图
+## 框架图
 ![](./image/glide_module.jpg)
 
-# 基本流程
-## 创建RequestManager
+## 基本概念
+
+
+## 基本流程
+### 创建RequestManager
 ```
 Glide.with(context);
 ```
@@ -49,7 +53,7 @@ Context支持五类参数
    }
 ```
 
-## 创建Request
+### 创建Request
 支持的类型有网络图片，本地图片，应用资源，二进制流，Uri对象等。
 
 加载普通图片，创建DrawableTypeRequest，所有Request的基类为GenericRequestBuilder。
@@ -76,7 +80,7 @@ asGif();
 downloadOnly();
 ```
 
-## 创建Target
+### 创建Target
 Request可以创建多种Target，例如ImageView，自定义Target，
 ```
 // 将图片加载到ImageView
@@ -90,11 +94,14 @@ into(width, height);
 ```
 
 
-# Glide其他用法
-## GlideModule
+## Glide其他用法
+### GlideModule
 
-# 附录
-## 图片加载框架
-[Android-Universal-Image-Loader](https://github.com/nostra13/Android-Universal-Image-Loader)，个人发起的项目，Android早期开发比较火，于2015年停止维护。
+## 附录
+### 参考资料
+* [Glide 源码解析](https://github.com/android-cn/android-open-project-analysis/tree/master/tool-lib/image-cache/glide)
+
+### 图片加载框架
+* [Android-Universal-Image-Loader](https://github.com/nostra13/Android-Universal-Image-Loader)，个人发起的项目，Android早期开发比较火，于2015年停止维护。
 * [Picasso](https://github.com/square/picasso)，Square公司出品
 * [Fresco](https://github.com/facebook/fresco)，Facebook公司出品

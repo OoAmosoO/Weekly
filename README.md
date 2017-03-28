@@ -6,7 +6,7 @@
 * [Glide源码解析](./topic/5.Glide源码解析)
 
 ## TODO Topic
-* 设计模式（分几个课题）
+* 设计模式
 * 热修复HotFix
 * Android 7.0的简介及适配
 * Android动画
