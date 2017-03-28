@@ -1,8 +1,8 @@
 ## Weekly 每周分享
 * [编码规范](./topic/1.编码规范)
 * [性能优化](./topic/2.性能优化)
-* [React Native](./topic/3.React Native)
-* [RxJava](./topic/4.RxJava)
+* [RN简介](./topic/3.RN简介)
+* [RxJava简介](./topic/4.RxJava简介)
 * [Glide源码解析](./topic/5.Glide源码解析)
 
 ## TODO Topic
