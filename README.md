@@ -13,6 +13,7 @@
 * 开源项目源码解析，[参考链接](http://a.codekk.com/)
 * JavaScript入门教程
 * ANR分析
+* 自定义View技巧
 
 ## 源码分析 Topic
 * Android的IPC通信机制
