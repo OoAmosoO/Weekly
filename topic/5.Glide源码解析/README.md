@@ -314,6 +314,12 @@ activeResources 是一个持有缓存 WeakReference 的 Map 集合。ReferenceQu
 
 ## 附录
 
+### 遗留问题
+* 懒加载
+* 缩略图逻辑
+* 图片加载崩溃
+* 内存过高问题，超过200M
+
 ### 参考资料
 * [Glide 源码解析](https://github.com/android-cn/android-open-project-analysis/tree/master/tool-lib/image-cache/glide)
 
