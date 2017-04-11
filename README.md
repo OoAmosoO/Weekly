@@ -6,6 +6,7 @@
 * [Glide源码解析](./topic/5.Glide源码解析)
 
 ## TODO Topic
+* 内存泄露分析与实践
 * 设计模式
 * 热修复HotFix
 * Android 7.0的简介及适配
@@ -13,6 +14,7 @@
 * 开源项目源码解析，[参考链接](http://a.codekk.com/)
 * JavaScript入门教程
 * ANR分析
+* Java注解浅析
 
 ## 源码分析 Topic
 * Android的IPC通信机制
