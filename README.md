@@ -15,10 +15,7 @@
 * JavaScript入门教程
 * ANR分析
 * 自定义View技巧
-<<<<<<< HEAD
 * Java注解浅析
-=======
->>>>>>> 23f7cb3c966094606534c6bcc77e9e8b25985cd6
 
 ## 源码分析 Topic
 * Android的IPC通信机制

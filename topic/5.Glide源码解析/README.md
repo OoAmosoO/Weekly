@@ -298,15 +298,196 @@ activeResources 是一个持有缓存 WeakReference 的 Map 集合。ReferenceQu
 使用到了 MessageQueue.IdleHandler，源码的注释：当一个线程等待更多 message 的时候会触发该回调,就是 messageQuene 空闲的时候会触发该回调
 
 * load( GlideContext glideContext, Object model, Key signature, int width, int height, Class resourceClass, Class transcodeClass, Priority priority, DiskCacheStrategy diskCacheStrategy, Map, Transformation<?>> transformations, boolean isTransformationRequired, Options options, boolean isMemoryCacheable, ResourceCallback cb)  
+Target.into()、preload、download时，会调度任务
+
+```Java
+// load时，会先进行MemoryCache获取，再去调度EngineJob
+EngineResource<?> cached = loadFromCache(key, isMemoryCacheable);
+  if (cached != null) {
+      cb.onResourceReady(cached);
+      if (Log.isLoggable(TAG, Log.VERBOSE)) {
+          logWithTimeAndKey("Loaded resource from cache", startTime, key);
+      }
+      return null;
+  }
+```
 
 真正的开始加载资源，看下面的流程图
 ![](./image/glide_preload_flow.jpg)
 
+### EngineJob
+调度DecodeJob，添加、移除资源回调，并回调通知。
+
+* start(EngineRunnable runnable);
+开始EngineRunnable，调度decodeJob
+
+* MainThreadCallback
+最终的结果，回调主线程
+
+```Java
+// Engine.load() 代码片段
+EngineJob engineJob = engineJobFactory.build(key, isMemoryCacheable);
+DecodeJob<T, Z, R> decodeJob = new DecodeJob<T, Z, R>(key, width, height, fetcher, loadProvider, transformation,
+        transcoder, diskCacheProvider, diskCacheStrategy, priority);
+EngineRunnable runnable = new EngineRunnable(engineJob, decodeJob, priority);
+jobs.put(key, engineJob);
+engineJob.addCallback(cb);
+
+// EngineJob调用执行DecodeJob
+engineJob.start(runnable);
+
+// cb
+public interface ResourceCallback {
+    void onResourceReady(Resource<?> resource);
+    void onException(Exception e);
+}
+// RequestBuild的listener就是通过ResourceCallback进行回调
+requestBuilder.listener(new RequestListener<String, GlideDrawable>())
+```
+
+### EngineRunnable
+实现Runnable方法，真正任务执行的地方，持有EngineRunnableManager和DecodeJob
+
+// 任务调度逻辑
+```Java
+@Override
+public void run() {
+    // ...
+    try {
+        resource = decode();
+    } catch (Exception e) {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "Exception decoding", e);
+        }
+        exception = e;
+    }
+
+    // ...
+    if (resource == null) {
+        onLoadFailed(exception);
+    } else {
+        onLoadComplete(resource);
+    }
+}
+```
+
+// 加载图片逻辑
+```Java
+// 优先从Cache中获取数据
+private Resource<?> decode() throws Exception {
+   if (isDecodingFromCache()) {
+       return decodeFromCache();
+   } else {
+       return decodeFromSource();
+   }
+}
+
+// 加载成功，回调onResourceReady方法
+private void onLoadComplete(Resource resource) {
+   manager.onResourceReady(resource);
+}
+
+// 加载缓存失败，则从Source中获取； 加载Source失败，回调onException。
+private void onLoadFailed(Exception e) {
+   if (isDecodingFromCache()) {
+       stage = Stage.SOURCE;
+       // 更改来源，重新执行任务
+       manager.submitForSource(this);
+   } else {
+       manager.onException(e);
+   }
+}
+```
+
 ### DecodeJob
 
-### ModelLoader
+// 加载Source流程
+```Java
+// 获取数据
+final A data = fetcher.loadData(priority);
 
-### ResourceTranscoder
+// 解码
+decoded = loadProvider.getSourceDecoder().decode(data, width, height);
+
+// 转换
+Resource<T> transformed = transformation.transform(decoded, width, height);
+
+// 转码
+Resource result = transcoder.transcode(transformed);
+```
+
+// 加载Cache流程
+```Java
+// 加载Cache
+Resource<T> transformed = loadFromCache(resultKey);
+Resource<Z> result = transcode(transformed);
+
+// Cache中Result为空，则从Cache的Source中获取，再进行转换、转码
+Resource<T> decoded = loadFromCache(resultKey.getOriginalKey());
+Resource<T> transformed = transformation.transform(decoded, width, height);
+Resource result = transcoder.transcode(transformed);
+```
+
+**DiskCache key需要注意的地方**
+Key有二类，一类为原始Source的Key，另一种为Result的key，二者不一样。使用Download方法下载图片后，获取Cache时需要注意。
+
+### ModelLoader
+ModelLoader 是一个工厂接口。将任意复杂的 model 转换为准确具体的可以被 DataFetcher 获取的数据类型。每一个 model 内部实现了一个 ModelLoaderFactory，内部实现就是将 model 转换为 Data
+
+```Java
+// 获取DataFetcher
+public interface ModelLoader<T, Y> {
+    DataFetcher<Y> getResourceFetcher(T model, int width, int height);
+}
+
+// 获取Source数据
+public interface DataFetcher<T> {
+  T loadData(Priority priority) throws Exception;
+}
+```
+
+## Glide数据处理流程
+
+**主要成员变量**  
+- ModelLoaderRegistry ：注册所有数据加载的 loader
+- ResourceDecoderRegistry：注册所有资源转换的 decoder  
+- TranscoderRegistry：注册所有对 decoder 之后进行特殊处理的 transcoder
+- ResourceEncoderRegistry：注册所有持久化 resource（处理过的资源）数据的 encoder
+- EncoderRegistry ： 注册所有的持久化原始数据的 encoder
+
+**标准的数据处理流程：**  
+![数据处理流程图](image/glide_data_process_flow.jpg)
+
+Glide 在初始化的时候，通过 Registry 注册以下所有组件， 每种组件由功能及处理的资源类型组成：
+
+组件| 构成
+:--|:-- |  
+loader |   model＋data＋ModelLoaderFactory  
+decoder |    dataClass＋resourceClass＋decoder  
+transcoder |  resourceClass＋transcodeClass  
+encoder  |    dataClass＋encoder  
+resourceEncoder  | resourceClass + encoder
+rewind  |    缓冲区处理
+
+Decoder | 数据源 | 解码后的资源 |
+:--|:-- |:--  |
+BitmapDrawableDecoder   | 	Bitmap              |		Drawable  
+StreamBitmapDecoder     |  	InputStream         |  	Bitmap
+ByteBufferBitmapDecoder |	  ByteBuffer          |  	Bitmap  
+GifFrameResourceDecoder | 	GifDecoder          |	 	Bitmap  
+StreamGifDecoder 	      |	  InputStream         | 	GifDrawable  
+ByteBufferGifDecoder	  |	  ByteBuffer          |	  Gif	  
+SvgDecoder		          |		InputStream	        |   SVG  
+VideoBitmapDecoder 	    |	  ParcelFileDescriptor|	  Bitmap  
+FileDecoder             |		File                | 	file    
+
+
+Transcoder | 数据源 | 转换后的资源 |
+:--|:-- |:--  |
+BitmapBytesTranscoder   | 	Bitmap              |		Bytes  
+BitmapDrawableTranscoder     |  	Bitmap         |  	Drawable
+GifDrawableBytesTranscoder |	  GifDrawable          |  	Bytes  
+SvgDrawableTranscoder | 	Svg          |	 	Drawable  
 
 
 ## 技术难点分析
@@ -316,9 +497,13 @@ activeResources 是一个持有缓存 WeakReference 的 Map 集合。ReferenceQu
 
 ### 遗留问题
 * 懒加载
+  OK
 * 缩略图逻辑
+  Glide的缩略图加载逻辑是先加载小图，最终显示大图加载的结果。
 * 图片加载崩溃
+  为什么要自己去判断资源是否释放？，要解决此问题。
 * 内存过高问题，超过200M
+  Glide的MemoryCache并不高，引起内存过高的原因是页面过多，且单个页面占用内存高，要解决此问题。
 
 ### 参考资料
 * [Glide 源码解析](https://github.com/android-cn/android-open-project-analysis/tree/master/tool-lib/image-cache/glide)
