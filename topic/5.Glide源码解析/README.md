@@ -490,20 +490,19 @@ GifDrawableBytesTranscoder |	  GifDrawable          |  	Bytes
 SvgDrawableTranscoder | 	Svg          |	 	Drawable  
 
 
-## 技术难点分析
-### 生命周期管理
-
 ## 附录
 
 ### 遗留问题
-* 懒加载
-  OK
-* 缩略图逻辑
+1. 懒加载  
+  可以使用，解决某些glide.setMemoryCategory(MemoryCategory.NORMAL)需要在主线程运行的问题
+2. 缩略图逻辑  
   Glide的缩略图加载逻辑是先加载小图，最终显示大图加载的结果。
-* 图片加载崩溃
-  为什么要自己去判断资源是否释放？，要解决此问题。
-* 内存过高问题，超过200M
-  Glide的MemoryCache并不高，引起内存过高的原因是页面过多，且单个页面占用内存高，要解决此问题。
+3. 图片加载崩溃  
+  TODO，为什么要去判断资源是否释放？需解决此问题。
+4. 内存过高问题，超过200M  
+  Glide的MemoryCache并不高，普通的配置占比为33%~40%，引起内存过高的原因是页面过多，且单个页面占用内存高。
+5. 解决Glide下载指定宽高图片  
+  TODO，做到只缓存Result，不保存Source。
 
 ### 参考资料
 * [Glide 源码解析](https://github.com/android-cn/android-open-project-analysis/tree/master/tool-lib/image-cache/glide)
