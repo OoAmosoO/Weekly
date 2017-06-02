@@ -12,11 +12,12 @@
 - [Android Graphic Performance (1): UI绘制流程](https://www.evernote.com/shard/s29/sh/b3d700b2-0efc-4380-9ca3-5638f823353b/4afbf1d56d23838a)
 - [ANR案例分析](https://www.evernote.com/shard/s29/sh/b193c55b-6a97-4571-b694-5781108cd85c/6e5774418f6d3dc5)
 - [Android冷启动](./topic/launch)
+- [Android插件化(一)](https://www.evernote.com/shard/s331/sh/6db20b46-e21c-4fda-bdbd-cd0f30343208/01e418f73e836120)
+- [Kotlin入门](https://www.evernote.com/shard/s29/sh/1dbc4ad9-2ffa-4cd0-bea1-84a856eeac2d/3bd5edd6510c5f17)
+- [APK廋身](./topic/apk)
 
 ## Todo Topic
-- APK瘦身
-- 插件化原理及实践
-- Kotlin简介
+- 插件化实践
 - 内存泄露分析与实践
 - 设计模式
 - [性能优化](./topic/performance)
