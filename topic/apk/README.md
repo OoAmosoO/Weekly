@@ -1,5 +1,5 @@
-# APK廋身
-随着版本的迭代，功能增加APk体积也会慢慢增大，本文主要介绍APK瘦身的常用方法。
+# APK瘦身
+随着版本的迭代，功能增加APK体积也会慢慢增大，本文主要介绍APK瘦身的常用方法。
 
 
 ## APK分析
@@ -32,7 +32,7 @@ res目录，主要存放图片和资源文件xml
   - 通过Lint检查，手动删除不用的资源。
   - 添加shrinkResources，去除无用的资源，该功能依赖混淆开关minifyEnable。
 
-- 移除某个res文件夹  
+- 移除res下部分资源（一）
   在gradle中配置，多个文件夹用:隔开
   ```Java
   android {
@@ -53,23 +53,52 @@ res目录，主要存放图片和资源文件xml
     - drawable-xhdpi-v4
     - drawable-ldrtl-mdpi-v17等
 
+- 移除res下部分资源（二）
+  参考链接：[https://developer.android.com/studio/build/configure-apk-splits.html](https://developer.android.com/studio/build/configure-apk-splits.html)
+  ```Java
+  android {
+    ...
+    splits {
+
+      // Configures multiple APKs based on screen density.
+      density {
+
+        // Configures multiple APKs based on screen density.
+        enable true
+
+        // Specifies a list of screen densities Gradle should not create multiple APKs for.
+        exclude "ldpi", "mhdpi", "hdpi"， "xhdpi"
+
+        // Specifies a list of compatible screen size settings for the manifest.
+        compatibleScreens 'small', 'normal', 'large', 'xlarge'
+      }
+    }
+  }
+  ```
+  优化结果：APK体积减少0.4M。
+
+移除res下部分资源方法比较：
+- 第一种方法，是移除res下指定资源文件夹
+- 第二种方法，是移除res下某个密度下的资源文件夹
+
 
 ## 优化arsc
 arsc文件，记录了资源id和资源的相对关系，比如字符串的内容，图片的相对路径，布局文件的路径。
 ![](./image/apk_resource_string.png)
 
 - 减少语言的支持  
-  目前包括各种语言（v4，v7包的引入)，可以看到上图支持132种语言，去除不需要的，保留4种。
+  目前包括各种语言（v4，v7包的引入)，可以看到上图支持132种语言，去除不需要的，保留中英文语言。
   ```Java
   defaultConfig {
-      resConfigs "en", "zh-rCN", "zh-rHK", "zh-rTW"
+      resConfigs "en-rGB", "en-rUS", "zh-rCN", "zh-rHK", "zh-rTW"
   }
   ```
   优化结果：APK的体积减少0.8M。
 
 - 资源混淆  
-  参考微信开源解决方案[AndResGuard](https://github.com/shwenzhang/AndResGuard)，通过使用段路径和压缩可以减少APK，需要注意的是某些资源需要keep。  
-  上述的开源方案是比较成熟的，可以去查看微信的APK的资源混淆。
+  参考微信开源解决方案[AndResGuard](https://github.com/shwenzhang/AndResGuard)，通过使用段路径和压缩可以减少APK。  
+  上述的开源方案是比较成熟的，可以去查看微信的APK的资源混淆。  
+  注意：某些资源需要keep，或者加入白名单。
 
 ## 优化dex
 ![](./image/apk_method_count.png)

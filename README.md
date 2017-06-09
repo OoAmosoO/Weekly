@@ -14,7 +14,8 @@
 - [Android冷启动](./topic/launch)
 - [Android插件化(一)](https://www.evernote.com/shard/s331/sh/6db20b46-e21c-4fda-bdbd-cd0f30343208/01e418f73e836120)
 - [Kotlin入门](https://www.evernote.com/shard/s29/sh/1dbc4ad9-2ffa-4cd0-bea1-84a856eeac2d/3bd5edd6510c5f17)
-- [APK廋身](./topic/apk)
+- [APK加固及模块化](https://github.com/WangPeiXXX/SomeNotes/blob/master/apk%E5%8A%A0%E5%9B%BA%E5%8F%8A%E6%A8%A1%E5%9D%97%E5%8C%96/%E5%8A%A0%E5%9B%BA%E5%8F%8A%E6%A8%A1%E5%9D%97%E5%8C%96%E5%88%86%E5%B1%82%E8%AE%BE%E8%AE%A1.md)
+- [APK瘦身](./topic/apk)
 
 ## Todo Topic
 - 插件化实践
