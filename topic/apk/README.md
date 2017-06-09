@@ -32,7 +32,7 @@ res目录，主要存放图片和资源文件xml
   - 通过Lint检查，手动删除不用的资源。
   - 添加shrinkResources，去除无用的资源，该功能依赖混淆开关minifyEnable。
 
-- 移除res下部分资源（一）
+- 移除res下部分资源（一）  
   在gradle中配置，多个文件夹用:隔开
   ```Java
   android {
@@ -53,7 +53,7 @@ res目录，主要存放图片和资源文件xml
     - drawable-xhdpi-v4
     - drawable-ldrtl-mdpi-v17等
 
-- 移除res下部分资源（二）
+- 移除res下部分资源（二）  
   参考链接：[https://developer.android.com/studio/build/configure-apk-splits.html](https://developer.android.com/studio/build/configure-apk-splits.html)
   ```Java
   android {
@@ -70,7 +70,7 @@ res目录，主要存放图片和资源文件xml
         exclude "ldpi", "mhdpi", "hdpi"， "xhdpi"
 
         // Specifies a list of compatible screen size settings for the manifest.
-        compatibleScreens 'small', 'normal', 'large', 'xlarge'
+        // compatibleScreens 'small', 'normal', 'large', 'xlarge'
       }
     }
   }
