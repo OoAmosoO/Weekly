@@ -187,6 +187,7 @@ public class SortPresenter {
 ![](./image/eventbus_leak.png)
 
 泄露原因：`注册EventBus后，没有反注册`
+
 解决办法：
 - EventBus一定是注册和反注册成对出现，必要的时候可以在页面的生命周期调用。
 - 空白页外部设置的Listener也需要移除监听。
